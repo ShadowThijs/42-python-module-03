@@ -1,57 +1,51 @@
+"""Coordinate system.
+
+Track 3D player positions using tuples and calculate distances.
+"""
+
 import math
 
 
-def calculate_distance(p1, p2):
-    """Calculates Euclidean distance between two 3D points."""
-    x1, y1, z1 = p1
-    x2, y2, z2 = p2
-    return math.sqrt((x2 - x1)**2 + (y2 - y1)**2 + (z2 - z1)**2)
+def get_player_pos() -> tuple[float, float, float]:
+    """Ask for coordinates until valid input is given."""
+    while True:
+        raw: str = input("Enter new coordinates as floats in format 'x,y,z': ")
+        parts: list[str] = raw.split(",")
+        if (len(parts) != 3):
+            print("Invalid syntax")
+            continue
+        try:
+            x: float = float(parts[0].strip())
+            y: float = float(parts[1].strip())
+            z: float = float(parts[2].strip())
+            return (x, y, z)
+        except ValueError as e:
+            bad: str = ""
+            for part in parts:
+                try:
+                    float(part.strip())
+                except ValueError:
+                    bad = part.strip()
+                    break
+            print(f"Error on parameter '{bad}': {e}")
 
 
-def parse_coordinates(coord_string):
-    """Parses a string 'x,y,z' into a tuple (x, y, z)."""
-    try:
-        parts = coord_string.split(',')
-        if len(parts) != 3:
-            raise ValueError("Coordinates must have 3 parts")
+print("=== Game Coordinate System ===")
+print("Get a first set of coordinates")
+pos1: tuple[float, float, float] = get_player_pos()
+print(f"Got a first tuple: {pos1}")
+print(f"It includes: X={pos1[0]}, Y={pos1[1]}, Z={pos1[2]}")
+dist1: float = round(math.sqrt(pos1[0] ** 2 + pos1[1] ** 2 + pos1[2] ** 2), 4)
+print(f"Distance to center: {dist1}")
 
-        coords = tuple(int(part.strip()) for part in parts)
-        return coords
-    except ValueError as e:
-        print(f"Error parsing coordinates: {e}")
-        print(f"Error details - Type: {type(e).__name__}, Args: {e.args}")
-        return None
-
-
-def main():
-    print("=== Game Coordinate System ===")
-
-    pos1 = (10, 20, 5)
-    origin = (0, 0, 0)
-
-    print(f"Position created: {pos1}")
-    dist1 = calculate_distance(origin, pos1)
-    print(f"Distance between {origin} and {pos1}: {round(dist1, 2)}")
-
-    demo_valid_str = "3,4,0"
-    print(f'Parsing coordinates: "{demo_valid_str}"')
-    parsed_pos = parse_coordinates(demo_valid_str)
-
-    if parsed_pos:
-        print(f"Parsed position: {parsed_pos}")
-        dist2 = calculate_distance(origin, parsed_pos)
-        print(f"Distance between {origin} and {parsed_pos}: {dist2}")
-
-    demo_invalid_str = "abc,def,ghi"
-    print(f'Parsing invalid coordinates: "{demo_invalid_str}"')
-    parse_coordinates(demo_invalid_str)
-
-    print("Unpacking demonstration:")
-    unpack_source = parsed_pos if parsed_pos else (3, 4, 0)
-
-    x, y, z = unpack_source
-    print(f"Player at x={x}, y={y}, z={z}")
-    print(f"Coordinates: X={x}, Y={y}, Z={z}")
-
-
-main()
+print("Get a second set of coordinates")
+pos2: tuple[float, float, float] = get_player_pos()
+dist2: float = round(
+    math.sqrt(
+        (pos2[0] - pos1[0]) ** 2
+        + (pos2[1] - pos1[1]) ** 2
+        + (pos2[2] - pos1[2]) ** 2
+    ),
+    4,
+)
+print(f"Distance between the 2 sets of coordinates: {dist2}")

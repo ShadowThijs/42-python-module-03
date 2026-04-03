@@ -1,24 +1,17 @@
+"""Command quest.
+
+Display command-line arguments received by the program.
+"""
+
 import sys
 
-
-def main():
-    print("=== Command Quest ===")
-    args = sys.argv
-    total = len(args)
-
-    if total == 1:
-        print("No arguments provided!")
-        print(f"Program name: {args[0]}")
-        print(f"Total arguments: {total}")
-    else:
-        print(f"Program name: {args[0]}")
-        print(f"Arguments received: {total - 1}")
-        index = 1
-        for arg in args[1:]:
-            print(f"Argument {index}: {arg}")
-            index += 1
-
-        print(f"Total arguments: {total}")
-
-
-main()
+print("=== Command Quest ===")
+args: list[str] = sys.argv
+print(f"Program name: {args[0]}")
+if (len(args) == 1):
+    print("No arguments provided!")
+else:
+    print(f"Arguments received: {len(args) - 1}")
+    for i, arg in enumerate(args[1:], start=1):
+        print(f"Argument {i}: {arg}")
+print(f"Total arguments: {len(args)}")
